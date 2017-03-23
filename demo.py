@@ -6,11 +6,12 @@ import importlib
 import sys
 from detect.detector import Detector
 
-CLASSES = ('aeroplane', 'bicycle', 'bird', 'boat',
-           'bottle', 'bus', 'car', 'cat', 'chair',
-           'cow', 'diningtable', 'dog', 'horse',
-           'motorbike', 'person', 'pottedplant',
-           'sheep', 'sofa', 'train', 'tvmonitor')
+# CLASSES = ('aeroplane', 'bicycle', 'bird', 'boat',
+#            'bottle', 'bus', 'car', 'cat', 'chair',
+#            'cow', 'diningtable', 'dog', 'horse',
+#            'motorbike', 'person', 'pottedplant',
+#            'sheep', 'sofa', 'train', 'tvmonitor')
+CLASSES = ('screwdriver', 'bottle')
 
 def get_detector(net, prefix, epoch, data_shape, mean_pixels, ctx,
                  nms_thresh=0.5, force_nms=True):
@@ -55,8 +56,12 @@ def parse_args():
                         default=0, type=int)
     parser.add_argument('--prefix', dest='prefix', help='trained model prefix',
                         default=os.path.join(os.getcwd(), 'model', 'ssd'), type=str)
+    '''
     parser.add_argument('--cpu', dest='cpu', help='(override GPU) use CPU to detect',
                         action='store_true', default=False)
+    '''
+    parser.add_argument('--cpu', dest='cpu', type=bool, default=False, 
+                        help='(override GPU) use CPU to detect')
     parser.add_argument('--gpu', dest='gpu_id', type=int, default=0,
                         help='GPU device id to detect with')
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=300,
@@ -86,7 +91,12 @@ if __name__ == '__main__':
         ctx = mx.gpu(args.gpu_id)
 
     # parse image list
-    image_list = [i.strip() for i in args.images.split(',')]
+    image_list = []
+    for root, dirs, files in os.walk(args.images):
+        for each in files:
+            image = os.path.join(root, each)
+            image_list.append(image)
+    # image_list = [i.strip() for i in args.images.split(',')]
     assert len(image_list) > 0, "No valid image specified to detect"
 
     detector = get_detector(args.network, args.prefix, args.epoch,
