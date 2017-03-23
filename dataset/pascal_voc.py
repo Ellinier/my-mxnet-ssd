@@ -33,11 +33,12 @@ class PascalVoc(Imdb):
         self.extension = '.jpg'
         self.is_train = is_train
 
-        self.classes = ['aeroplane', 'bicycle', 'bird', 'boat',
-                        'bottle', 'bus', 'car', 'cat', 'chair',
-                        'cow', 'diningtable', 'dog', 'horse',
-                        'motorbike', 'person', 'pottedplant',
-                        'sheep', 'sofa', 'train', 'tvmonitor']
+        # self.classes = ['aeroplane', 'bicycle', 'bird', 'boat',
+        #                 'bottle', 'bus', 'car', 'cat', 'chair',
+        #                 'cow', 'diningtable', 'dog', 'horse',
+        #                 'motorbike', 'person', 'pottedplant',
+        #                 'sheep', 'sofa', 'train', 'tvmonitor']
+        self.classes = ['screwdriver', 'bottle']
 
         self.config = {'use_difficult': True,
                        'comp_id': 'comp4',
