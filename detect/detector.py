@@ -95,7 +95,7 @@ class Detector(object):
                             is_train=False)
         return self.detect(test_iter, show_timer)
 
-    def visualize_detection(self, img, dets, classes=[], thresh=0.6):
+    def visualize_detection(self, img, dets, path, classes=[], thresh=0.6):
         """
         visualize detections in one image
 
@@ -113,6 +113,9 @@ class Detector(object):
         """
         import matplotlib.pyplot as plt
         import random
+
+        fig = plt.figure()
+
         plt.imshow(img)
         height = img.shape[0]
         width = img.shape[1]
@@ -140,7 +143,10 @@ class Detector(object):
                                     '{:s} {:.3f}'.format(class_name, score),
                                     bbox=dict(facecolor=colors[cls_id], alpha=0.5),
                                     fontsize=12, color='white')
-        plt.show()
+        # plt.show()
+
+        fig.savefig('labeled/'+ path.split('/')[-1])
+        fig.close()
 
     def detect_and_visualize(self, im_list, root_dir=None, extension=None,
                              classes=[], thresh=0.6, show_timer=False):
@@ -169,4 +175,5 @@ class Detector(object):
         for k, det in enumerate(dets):
             img = cv2.imread(im_list[k])
             img[:, :, (0, 1, 2)] = img[:, :, (2, 1, 0)]
-            self.visualize_detection(img, det, classes, thresh)
+
+            self.visualize_detection(img, det, im_list[k], classes, thresh)
